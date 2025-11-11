@@ -1,0 +1,180 @@
+/* Bucket List page styles */
+
+/* Page header layout tweaks */
+.dd-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.bucket-h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+}
+
+/* Responsive grid:
+   - mobile: 1 per row (list)
+   - >= 900px: 2 per row */
+.bucket-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .bucket-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Card (bigger than home cards) */
+.bucket-card {
+  display: grid;
+  grid-template-columns: 120px 1fr; /* image + content */
+  gap: 14px;
+  border: 1px solid var(--glass-stroke);
+  border-radius: 16px;
+  background: linear-gradient(
+      180deg,
+      rgba(245, 213, 224, 0.08),
+      rgba(123, 51, 126, 0.08)
+    ),
+    var(--card-bg);
+  box-shadow: var(--shadow-1);
+  padding: 12px;
+}
+@media (min-width: 900px) {
+  .bucket-card {
+    grid-template-columns: 160px 1fr;
+  }
+}
+
+/* Image preview */
+.bucket-img {
+  width: 100%;
+  height: 120px;
+  border-radius: 12px;
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--glass-stroke);
+}
+
+/* Content */
+.bucket-title {
+  margin: 0 0 4px;
+  font-family: "Playfair Display", serif;
+  font-size: 18px;
+  font-weight: 600;
+}
+.bucket-meta {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.bucket-notes {
+  margin: 8px 0 0;
+}
+
+/* Controls row */
+.bucket-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+}
+
+/* Status dropdown style */
+.bucket-status {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-stroke);
+  border-radius: 12px;
+  padding: 8px 10px;
+}
+.bucket-status:focus {
+  border-color: rgba(195, 163, 255, 0.55);
+}
+
+/* Soft-delete hint style for archived items (if you view them later) */
+.bucket-archived {
+  opacity: 0.7;
+  filter: grayscale(0.15);
+}
+
+.dd-fab {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  right: calc(16px + env(safe-area-inset-right, 0px));
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(245, 213, 224, 0.1),
+    rgba(123, 51, 126, 0.1)
+  );
+  border: 1px solid var(--glass-stroke);
+  box-shadow: var(--shadow-2);
+  color: var(--text);
+  font-size: 28px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 999; /* keep above everything */
+  transition: transform 0.22s var(--easing), box-shadow 0.22s var(--easing),
+    border-color 0.22s var(--easing);
+}
+.dd-fab:hover {
+  transform: scale(1.08);
+  border-color: rgba(195, 163, 255, 0.55);
+}
+
+/* Make main take full height */
+html,
+body {
+  height: 100%;
+}
+
+main.dd-wrap {
+  min-height: 100vh; /* full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+/* optional: ensures the grid expands nicely below the header */
+.bucket-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+/* --- UI polish tweaks for bucket list --- */
+
+.center {
+  min-height: calc(100vh - 200px);
+  text-align: center;
+}
+
+.dd-fab:hover {
+  box-shadow: 0 0 20px rgba(195, 163, 255, 0.4);
+}
+
+.bucket-card {
+  animation: fadeInUp 0.25s ease forwards;
+  cursor: pointer;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

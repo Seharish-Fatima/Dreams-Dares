@@ -1,0 +1,243 @@
+/* Cards */
+.dd-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius);
+  padding: 22px;
+  min-height: 170px;
+  background: linear-gradient(
+      180deg,
+      rgba(245, 213, 224, 0.08),
+      rgba(123, 51, 126, 0.08)
+    ),
+    var(--card-bg);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: var(--shadow-1);
+  transition: transform 0.22s var(--easing), box-shadow 0.22s var(--easing),
+    border-color 0.22s var(--easing);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.dd-card:hover {
+  transform: translateY(-4px) scale(1.02);
+  box-shadow: var(--shadow-2);
+  border-color: rgba(195, 163, 255, 0.55);
+}
+.dd-card-icon {
+  font-size: 28px;
+  opacity: 0.95;
+  margin-bottom: 8px;
+}
+.dd-card-title {
+  margin: 6px 0 4px;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+.dd-card-meta {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Buttons */
+.dd-btn {
+  border: 1px solid var(--glass-stroke);
+  border-radius: 12px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  cursor: pointer;
+  transition: border-color 0.18s var(--easing), transform 0.18s var(--easing);
+}
+.dd-btn:hover {
+  border-color: rgba(195, 163, 255, 0.55);
+  transform: translateY(-1px);
+}
+.dd-primary {
+  background: linear-gradient(
+    180deg,
+    rgba(245, 213, 224, 0.18),
+    rgba(123, 51, 126, 0.18)
+  );
+}
+
+/* Chips */
+.dd-chip {
+  display: inline-block;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  color: var(--moon-blush);
+  border: 1px solid var(--glass-stroke);
+  background: linear-gradient(
+    180deg,
+    rgba(245, 213, 224, 0.1),
+    rgba(123, 51, 126, 0.1)
+  );
+}
+
+/* FAB (section pages only) */
+.dd-fab {
+  position: fixed;
+  bottom: 22px;
+  right: 20px;
+  width: 54px;
+  height: 54px;
+  border-radius: 999px;
+  background: linear-gradient(
+    180deg,
+    rgba(245, 213, 224, 0.1),
+    rgba(123, 51, 126, 0.1)
+  );
+  border: 1px solid var(--glass-stroke);
+  box-shadow: var(--shadow-2);
+  color: var(--text);
+  font-size: 28px;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  z-index: 70;
+  transition: transform 0.22s var(--easing), box-shadow 0.22s var(--easing),
+    border-color 0.22s var(--easing);
+}
+.dd-fab:hover {
+  transform: scale(1.08);
+  border-color: rgba(195, 163, 255, 0.55);
+}
+
+/* Modal (used on section pages) */
+.dd-modal {
+  position: fixed;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 60;
+  background: rgba(10, 5, 20, 0.55);
+  backdrop-filter: blur(8px);
+}
+.dd-modal[open],
+.dd-modal.show {
+  display: flex;
+}
+.dd-modal-card {
+  width: min(860px, 94vw);
+  max-height: 86vh;
+  overflow: auto;
+  border-radius: 22px;
+  padding: 22px 22px 28px;
+  background: linear-gradient(
+      180deg,
+      rgba(245, 213, 224, 0.08),
+      rgba(123, 51, 126, 0.08)
+    ),
+    var(--card-bg);
+  border: 1px solid var(--glass-stroke);
+  box-shadow: var(--shadow-2);
+}
+.dd-modal-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.dd-modal-top h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+}
+.dd-close {
+  cursor: pointer;
+  border: 1px solid var(--glass-stroke);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  padding: 6px 10px;
+}
+.dd-modal-body p {
+  margin-top: 0;
+  color: var(--muted);
+}
+.dd-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+/* Forms (section pages) */
+label {
+  display: block;
+  font-size: 13px;
+  color: var(--moon-blush);
+  margin: 12px 0 6px;
+}
+input[type="text"],
+input[type="search"],
+textarea,
+select {
+  width: 100%;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--glass-stroke);
+  border-radius: 12px;
+  padding: 10px 12px;
+  box-shadow: var(--shadow-1);
+  outline: none;
+  transition: border-color 0.18s var(--easing);
+}
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: rgba(195, 163, 255, 0.55);
+}
+.dd-upload input[type="file"] {
+  display: block;
+  width: 100%;
+}
+
+/* Dropdown readability tweak (your request) */
+.dd-modal select,
+.dd-modal option {
+  color: #000;
+}
+
+/* Utilities */
+.hidden {
+  display: none !important;
+}
+.center {
+  display: grid;
+  place-items: center;
+}
+
+/* A11y focus */
+:focus-visible {
+  outline: 2px solid rgba(195, 163, 255, 0.65);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Animations */
+.dd-fade-in {
+  animation: fadeIn 0.26s var(--easing) both;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.dd-fab:hover {
+  box-shadow: 0 0 20px rgba(195, 163, 255, 0.4);
+}

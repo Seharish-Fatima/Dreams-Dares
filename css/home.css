@@ -1,0 +1,6 @@
+/* Home-only tweaks (optional) */
+
+/* Example: a tad more spacing under the grid on home */
+#homeGrid {
+  margin-bottom: 12px;
+}

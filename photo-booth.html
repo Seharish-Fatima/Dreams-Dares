@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#210635" />
+    <title>Photo Booth — Dreams & Dares</title>
+    <meta
+      name="description"
+      content="Goofy, raw, unfiltered photos with captions."
+    />
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <!-- Page styles -->
+    <link rel="stylesheet" href="css/photo-booth.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="dd-header" role="banner">
+      <div class="dd-wrap dd-head">
+        <div class="dd-brand">
+          <a class="dd-logo" href="index.html" aria-label="Go to home">🌙</a>
+          <div class="dd-titles">
+            <a href="index.html" aria-label="Dreams & Dares home">
+              <h1 class="dd-title">Dreams & Dares</h1>
+              <p class="dd-subtitle">Photo Booth</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="dd-wrap" role="main">
+      <section class="pb-head">
+        <div>
+          <h2 class="pb-h2">Photo Booth</h2>
+          <p class="dd-card-meta">
+            Drop pics, add a caption, live your goofy truth.
+          </p>
+        </div>
+      </section>
+
+      <!-- Grid -->
+      <div id="pbGrid" class="pb-grid dd-fade-in"></div>
+    </main>
+
+    <!-- FAB -->
+    <button id="pbAddBtn" class="dd-fab" aria-label="Add photo(s)">＋</button>
+
+    <!-- Modal -->
+    <div class="dd-modal" id="pbModal" role="dialog" aria-modal="true">
+      <div class="dd-modal-card">
+        <div class="dd-modal-top">
+          <h2 id="pbModalTitle">New Upload</h2>
+          <button class="dd-close" data-close-modal aria-label="Close">
+            ✕
+          </button>
+        </div>
+        <div class="dd-modal-body">
+          <form id="pbForm">
+            <input type="hidden" name="id" />
+            <label
+              >Caption (title)
+              <input
+                type="text"
+                name="title"
+                placeholder="What’s happening here?"
+                required
+              />
+            </label>
+            <label
+              >Description (optional)
+              <textarea
+                name="desc"
+                rows="4"
+                placeholder="Storytime… (optional)"
+              ></textarea>
+            </label>
+            <label class="dd-upload"
+              >Images
+              <input
+                type="file"
+                name="media"
+                accept="image/*"
+                multiple
+                required
+              />
+            </label>
+            <p
+              class="dd-card-meta"
+              id="pbEditHint"
+              style="display: none; margin-top: 6px"
+            >
+              Tip: leave the file picker empty to keep existing images.
+            </p>
+            <div class="dd-modal-actions">
+              <button type="button" class="dd-btn" data-close-modal>
+                Cancel
+              </button>
+              <button type="submit" class="dd-btn dd-primary">Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/photo-booth.js"></script>
+  </body>
+</html>

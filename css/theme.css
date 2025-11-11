@@ -1,0 +1,22 @@
+/* Dreams & Dares — Theme Tokens */
+:root {
+  /* MOON Palette */
+  --moon-blush: #f5d5e0; /* soft highlight */
+  --haze-violet: #6667ab; /* violet accent */
+  --plum-pop: #7b337e; /* magenta accent */
+  --deep-wine: #420d4b; /* card strokes */
+  --night-indigo: #210635; /* background */
+
+  /* Theme tokens */
+  --bg: var(--night-indigo);
+  --card-bg: rgba(255, 255, 255, 0.06);
+  --glass-stroke: rgba(255, 255, 255, 0.14);
+  --text: #f7f5fb;
+  --muted: #c9c3d6;
+  --radius: 18px;
+  --shadow-1: 0 4px 14px rgba(0, 0, 0, 0.25);
+  --shadow-2: 0 10px 28px rgba(0, 0, 0, 0.35);
+  --easing: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --maxw: 1200px;
+  --grid-gap: 18px;
+}

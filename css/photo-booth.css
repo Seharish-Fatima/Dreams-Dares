@@ -1,0 +1,105 @@
+/* Photo Booth page */
+
+.pb-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 6px 0 12px;
+}
+.pb-h2 {
+  margin: 0;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+}
+
+/* Grid: 2 per row on mobile, 4 per row on desktop */
+.pb-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 1100px) {
+  .pb-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* Card squares */
+.pb-card {
+  border: 1px solid var(--glass-stroke);
+  border-radius: 16px;
+  background: linear-gradient(
+      180deg,
+      rgba(245, 213, 224, 0.08),
+      rgba(123, 51, 126, 0.08)
+    ),
+    var(--card-bg);
+  box-shadow: var(--shadow-1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.pb-thumb {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* square cover */
+  object-fit: cover;
+  background: rgba(255, 255, 255, 0.06);
+  display: block;
+  border-bottom: 1px solid var(--glass-stroke);
+}
+.pb-meta {
+  padding: 10px 12px 0;
+}
+.pb-title {
+  margin: 0 0 4px;
+  font-family: "Playfair Display", serif;
+  font-weight: 600;
+  font-size: 16px;
+}
+.pb-sub {
+  margin: 0 0 10px;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.4;
+}
+.pb-actions {
+  display: flex;
+  gap: 8px;
+  padding: 0 12px 12px;
+}
+
+/* FAB glow polish */
+.dd-fab:hover {
+  box-shadow: 0 0 20px rgba(195, 163, 255, 0.4);
+}
+
+/* Full-height main on light content */
+html,
+body {
+  height: 100%;
+}
+main.dd-wrap {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.center {
+  min-height: calc(100vh - 200px);
+  text-align: center;
+}
+
+/* Tiny animation for cards */
+.pb-card {
+  animation: pbFade 0.24s var(--easing) both;
+}
+@keyframes pbFade {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

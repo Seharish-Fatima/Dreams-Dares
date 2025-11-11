@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="theme-color" content="#210635" />
+    <title>Bucket List — Dreams & Dares</title>
+    <meta
+      name="description"
+      content="Our shared bucket list of dares & dreams."
+    />
+
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Shared styles -->
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/base.css" />
+    <link rel="stylesheet" href="css/components.css" />
+    <!-- Page styles -->
+    <link rel="stylesheet" href="css/bucket.css" />
+  </head>
+  <body>
+    <!-- Header -->
+    <header class="dd-header" role="banner">
+      <div class="dd-wrap dd-head">
+        <div class="dd-brand">
+          <a class="dd-logo" href="index.html" aria-label="Go to home">🌙</a>
+          <div class="dd-titles">
+            <a href="index.html" aria-label="Dreams & Dares home">
+              <h1 class="dd-title">Dreams & Dares</h1>
+              <p class="dd-subtitle">Bucket List</p>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main -->
+    <main class="dd-wrap" role="main">
+      <section class="dd-section">
+        <div class="dd-section-head">
+          <div>
+            <h2 class="bucket-h2">Bucket List</h2>
+            <p class="dd-card-meta">Dreams we refuse to shelve.</p>
+          </div>
+        </div>
+
+        <div id="bucketGrid" class="bucket-grid dd-fade-in"></div>
+      </section>
+    </main>
+
+    <!-- put it here, AFTER </main> -->
+    <button id="addEntryBtn" class="dd-fab" aria-label="Add bucket item">
+      ＋
+    </button>
+
+    <!-- Modal: Add / Edit -->
+    <div class="dd-modal" id="bucketModal" role="dialog" aria-modal="true">
+      <div class="dd-modal-card">
+        <div class="dd-modal-top">
+          <h2 id="modalTitle">New Bucket Item</h2>
+          <button class="dd-close" data-close-modal aria-label="Close">
+            ✕
+          </button>
+        </div>
+        <div class="dd-modal-body">
+          <form id="bucketForm">
+            <input type="hidden" name="id" />
+            <label
+              >Title
+              <input
+                type="text"
+                name="title"
+                placeholder="What do we want to do?"
+                required
+              />
+            </label>
+            <label
+              >Location (optional)
+              <input type="text" name="location" placeholder="Where?" />
+            </label>
+            <label
+              >Target date (optional)
+              <input type="date" name="dueDate" />
+            </label>
+            <label
+              >Status
+              <select name="status">
+                <option value="todo">To-Do</option>
+                <option value="done">Done</option>
+              </select>
+            </label>
+            <label class="dd-upload"
+              >Cover image (optional)
+              <input type="file" name="media" accept="image/*" />
+            </label>
+            <label
+              >Notes (optional)
+              <textarea
+                name="notes"
+                rows="4"
+                placeholder="Add details, links, or a cute rant…"
+              ></textarea>
+            </label>
+
+            <div class="dd-modal-actions">
+              <button type="submit" class="dd-btn dd-primary">Save</button>
+              <button type="button" class="dd-btn" data-close-modal>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Scripts -->
+    <script type="module" src="js/firebase-init.js"></script>
+    <script type="module" src="js/adapters/firebase-bucket.js"></script>
+    <script type="module" src="js/bucket.js"></script>
+  </body>
+</html>
