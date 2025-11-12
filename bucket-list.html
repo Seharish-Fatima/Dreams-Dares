@@ -125,5 +125,23 @@
     <script type="module" src="js/firebase-init.js"></script>
     <script type="module" src="js/adapters/firebase-bucket.js"></script>
     <script type="module" src="js/bucket.js"></script>
+    <script type="module">
+      import { auth } from "./js/firebase-init.js";
+      import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+      onAuthStateChanged(auth, (u) => {
+        if (!u) return;
+        const bar = document.createElement("div");
+        bar.style.cssText =
+          "position:fixed;bottom:0;left:0;right:0;background:#000c;color:#fff;padding:10px 14px;font:12px/1.4 Inter,system-ui;z-index:9999";
+        bar.textContent = `Your UID: ${u.uid} — tap to copy`;
+        bar.addEventListener("click", async () => {
+          try {
+            await navigator.clipboard.writeText(u.uid);
+            bar.textContent = "Copied! Send to Sash 🖤";
+          } catch {}
+        });
+        document.body.appendChild(bar);
+      });
+    </script>
   </body>
 </html>
