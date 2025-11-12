@@ -1,17 +1,11 @@
-// js/bucket.js — Bucket List page logic (ES module)
+// js/bucket.js — hybrid: Firestore (if present) + local fallback
 import {
   getState,
   addBucketItem,
   updateBucketItem,
   archiveBucketItem,
 } from "./storage.js";
-import {
-  filesToDataUrls,
-  escapeHTML,
-  formatDate,
-  openModal,
-  closeModal,
-} from "./utils.js";
+import { filesToDataUrls, formatDate, openModal, closeModal } from "./utils.js";
 
 (function () {
   const grid = document.getElementById("bucketGrid");
@@ -20,23 +14,26 @@ import {
   const addBtn = document.getElementById("addEntryBtn");
   const modalTitle = document.getElementById("modalTitle");
 
-  // Safety guards
   if (!grid || !modal || !form) {
     console.warn("[Bucket] Required DOM nodes missing.");
     return;
   }
 
-  // Open "new item" modal
+  // --------- State source ---------
+  // If Firestore adapter is loaded it will push live arrays into this.
+  let liveItems = null;
+
+  // The adapter will call this whenever onSnapshot changes.
+  window.renderBucketItems = (items) => {
+    liveItems = Array.isArray(items) ? items : [];
+    renderFromArray(liveItems);
+  };
+
+  // --------- UI events ---------
   if (addBtn) {
     addBtn.addEventListener("click", () => {
       form.reset();
-      // ensure hidden id field exists
-      if (!form.id) {
-        const hid = document.createElement("input");
-        hid.type = "hidden";
-        hid.name = "id";
-        form.appendChild(hid);
-      }
+      ensureHiddenId(form);
       form.id.value = "";
       if (form.status) form.status.value = "todo";
       if (modalTitle) modalTitle.textContent = "New Bucket Item";
@@ -44,7 +41,6 @@ import {
     });
   }
 
-  // Modal close interactions
   modal.addEventListener("click", (e) => {
     if (e.target === modal) closeModal(modal);
   });
@@ -52,12 +48,10 @@ import {
     .querySelectorAll("[data-close-modal]")
     .forEach((b) => b.addEventListener("click", () => closeModal(modal)));
 
-  // Create / Update submit
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const fd = new FormData(form);
 
-    // Cover image — only first file used
     const fileInput = form.querySelector('input[name="media"]');
     const files = fileInput ? fileInput.files : [];
     const imgs = await filesToDataUrls(files);
@@ -73,25 +67,48 @@ import {
     };
 
     const id = (fd.get("id") || "").toString();
-    if (id) {
-      updateBucketItem(id, payload);
+
+    // If Firestore adapter is present, use it; else localStorage.
+    if (window.BucketAPI) {
+      try {
+        if (id) {
+          await window.BucketAPI.updateItem(id, payload);
+        } else {
+          await window.BucketAPI.createItem(payload);
+        }
+      } catch (err) {
+        console.error("[Bucket] Firestore write failed, falling back:", err);
+      }
     } else {
-      addBucketItem(payload);
+      if (id) updateBucketItem(id, payload);
+      else addBucketItem(payload);
+      renderLocal(); // immediate local re-render
     }
 
     closeModal(modal);
-    render();
   });
 
-  // Render list/grid
+  // --------- Rendering ---------
   function render() {
+    // Prefer live Firestore items if present; otherwise local.
+    if (liveItems) {
+      renderFromArray(liveItems);
+    } else {
+      renderLocal();
+    }
+  }
+
+  function renderLocal() {
     const s = getState();
     const items = (s.bucketList || [])
       .filter((i) => !i.archived)
       .slice()
       .sort((a, b) => (b.createdAt || 0) - (a.createdAt || 0));
+    renderFromArray(items);
+  }
 
-    if (!items.length) {
+  function renderFromArray(items) {
+    if (!items || !items.length) {
       grid.innerHTML = `
         <div class="center dd-fade-in" style="min-height:220px">
           <div style="text-align:center">
@@ -101,12 +118,10 @@ import {
         </div>`;
       return;
     }
-
     grid.innerHTML = "";
     items.forEach((it) => grid.appendChild(card(it)));
   }
 
-  // Build a card node
   function card(it) {
     const el = document.createElement("article");
     el.className = "bucket-card dd-fade-in";
@@ -130,13 +145,13 @@ import {
     const meta = document.createElement("p");
     meta.className = "bucket-meta";
     const bits = [
-      `created ${formatDate(it.createdAt)}`,
+      it.createdAt ? `created ${formatDate(it.createdAt)}` : null,
       it.location ? it.location : null,
       it.dueDate ? `due ${it.dueDate}` : null,
     ].filter(Boolean);
     meta.textContent = bits.join(" · ");
 
-    // status dropdown
+    // Status dropdown
     const statusSel = document.createElement("select");
     statusSel.className = "bucket-status";
     statusSel.innerHTML = `
@@ -144,9 +159,13 @@ import {
       <option value="done">Done</option>
     `;
     statusSel.value = it.status === "done" ? "done" : "todo";
-    statusSel.addEventListener("change", () => {
-      updateBucketItem(it.id, { status: statusSel.value });
-      render();
+    statusSel.addEventListener("change", async () => {
+      if (window.BucketAPI) {
+        await window.BucketAPI.updateItem(it.id, { status: statusSel.value });
+      } else {
+        updateBucketItem(it.id, { status: statusSel.value });
+        renderLocal();
+      }
     });
 
     const notes = document.createElement("p");
@@ -164,55 +183,50 @@ import {
     const delBtn = document.createElement("button");
     delBtn.className = "dd-btn";
     delBtn.textContent = "Delete";
-    delBtn.addEventListener("click", () => softDelete(it));
+    delBtn.addEventListener("click", async () => {
+      if (!confirm("Archive this item?")) return;
+      if (window.BucketAPI) {
+        await window.BucketAPI.removeItem(it.id);
+      } else {
+        archiveBucketItem(it.id);
+        renderLocal();
+      }
+    });
 
-    controls.appendChild(statusSel);
-    controls.appendChild(editBtn);
-    controls.appendChild(delBtn);
+    controls.append(statusSel, editBtn, delBtn);
 
-    body.appendChild(h);
-    body.appendChild(meta);
+    body.append(h, meta);
     if (it.notes) body.appendChild(notes);
     body.appendChild(controls);
 
-    el.appendChild(img);
-    el.appendChild(body);
+    el.append(img, body);
     return el;
   }
 
-  // Open modal prefilled for edit
   function openEdit(it) {
     form.reset();
-    if (!form.id) {
-      const hid = document.createElement("input");
-      hid.type = "hidden";
-      hid.name = "id";
-      form.appendChild(hid);
-    }
+    ensureHiddenId(form);
     if (modalTitle) modalTitle.textContent = "Edit Bucket Item";
 
-    form.id.value = it.id;
+    form.id.value = it.id || "";
     form.title.value = it.title || "";
     form.location.value = it.location || "";
     form.dueDate.value = it.dueDate || "";
     if (form.status) form.status.value = it.status || "todo";
     form.notes.value = it.notes || "";
-    // image: not prefilled; uploading a new one overwrites
     openModal(modal);
   }
 
-  // Soft delete (archive)
-  function softDelete(it) {
-    if (
-      confirm(
-        "Archive this item? (You can add an Archive page later to restore.)"
-      )
-    ) {
-      archiveBucketItem(it.id);
-      render();
+  function ensureHiddenId(formEl) {
+    if (!formEl.id) {
+      const hid = document.createElement("input");
+      hid.type = "hidden";
+      hid.name = "id";
+      formEl.appendChild(hid);
     }
   }
 
-  // boot
+  // initial render (local fallback). If Firestore adapter is present,
+  // it will overwrite via window.renderBucketItems().
   render();
 })();

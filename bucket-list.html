@@ -123,8 +123,9 @@
 
     <!-- Scripts -->
     <script type="module" src="js/firebase-init.js"></script>
-    <script type="module" src="js/adapters/firebase-bucket.js"></script>
     <script type="module" src="js/bucket.js"></script>
+    <!-- defines window.renderBucketItems -->
+    <script type="module" src="js/adapters/firebase-bucket.js"></script>
     <script type="module">
       import { auth } from "./js/firebase-init.js";
       import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
